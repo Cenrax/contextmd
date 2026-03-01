@@ -186,3 +186,5 @@ Desktop.ini
 
 # Log files
 *.log
+
+prd/

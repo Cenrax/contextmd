@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import types
+from collections.abc import AsyncIterator, Iterator
 from pathlib import Path
-from typing import Any, AsyncIterator, Iterator, overload
+from typing import Any
 
 from contextmd.adapters import AdapterRegistry, ProviderAdapter, detect_provider
 from contextmd.config import ContextMDConfig

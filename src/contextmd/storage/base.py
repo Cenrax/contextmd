@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from contextmd.memory.types import MemoryEntry, MemoryType
+    from contextmd.memory.types import MemoryEntry
 
 
 class StorageBackend(ABC):

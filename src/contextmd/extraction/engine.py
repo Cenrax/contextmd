@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any
 
 from contextmd.extraction.dedup import Deduplicator
 from contextmd.extraction.prompts import EXTRACTION_SYSTEM_PROMPT, EXTRACTION_USER_PROMPT
-from contextmd.memory.types import MemoryType
 from contextmd.storage.memory import MemoryStore
 
 if TYPE_CHECKING:

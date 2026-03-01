@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import re
 from datetime import datetime, timedelta
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from contextmd.storage.base import MemoryStorage
@@ -99,13 +98,10 @@ class MemoryStore(MemoryStorage):
         lines = content.splitlines()
         if len(lines) > self.config.memory_line_cap:
             semantic_start = None
-            procedural_start = None
 
             for i, line in enumerate(lines):
                 if line.strip() == "## Semantic Facts":
                     semantic_start = i
-                elif line.strip() == "## Procedural Rules":
-                    procedural_start = i
 
             if semantic_start is not None:
                 excess = len(lines) - self.config.memory_line_cap

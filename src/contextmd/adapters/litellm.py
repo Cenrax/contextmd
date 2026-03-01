@@ -104,7 +104,8 @@ class LiteLLMAdapter(ProviderAdapter):
         try:
             import litellm
             model_info = litellm.get_model_info(model)
-            return model_info.get("max_input_tokens", 128000)
+            max_tokens = model_info.get("max_input_tokens", 128000)
+            return int(max_tokens) if max_tokens is not None else 128000
         except Exception:
             pass
 
@@ -140,7 +141,8 @@ class LiteLLMAdapter(ProviderAdapter):
             if choice:
                 if isinstance(choice, dict):
                     delta = choice.get("delta", {})
-                    return delta.get("content")
+                    content = delta.get("content")
+                    return str(content) if content is not None else None
                 else:
                     delta = getattr(choice, "delta", None)
                     if delta:

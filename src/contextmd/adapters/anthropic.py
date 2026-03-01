@@ -41,10 +41,11 @@ class AnthropicAdapter(ProviderAdapter):
 
         existing_system = request.get("system", "")
 
+        new_system: str | list[dict[str, str]]
         if isinstance(existing_system, list):
             new_system = [{"type": "text", "text": memory_text}] + existing_system
         elif existing_system:
-            new_system = memory_text + existing_system
+            new_system = memory_text + str(existing_system)
         else:
             new_system = memory_text
 

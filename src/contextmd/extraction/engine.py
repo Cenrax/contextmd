@@ -178,7 +178,9 @@ class ExtractionEngine:
             end = content.rfind("]")
             if start != -1 and end != -1:
                 try:
-                    return json.loads(content[start : end + 1])
+                    result = json.loads(content[start : end + 1])
+                    if isinstance(result, list):
+                        return list(result)
                 except json.JSONDecodeError:
                     pass
             return []

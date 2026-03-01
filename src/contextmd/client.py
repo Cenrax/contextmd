@@ -192,7 +192,7 @@ class ContextMD:
         response = await self._acall_provider(enriched_request)
 
         if stream:
-            return await self._handle_streaming_response_async(response)
+            return self._handle_streaming_response_async(response)
 
         self._process_response(response)
         return response

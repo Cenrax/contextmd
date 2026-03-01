@@ -1,0 +1,90 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "contextmd"
+dynamic = ["version"]
+description = "A provider-agnostic middleware that gives LLM API calls persistent, human-readable memory using local Markdown files"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Subham", email = "subhamkundu999@gmail.com" }
+]
+keywords = [
+    "llm",
+    "memory",
+    "openai",
+    "anthropic",
+    "litellm",
+    "markdown",
+    "context",
+    "middleware"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+openai = ["openai>=1.0.0"]
+anthropic = ["anthropic>=0.18.0"]
+litellm = ["litellm>=1.0.0"]
+all = [
+    "openai>=1.0.0",
+    "anthropic>=0.18.0",
+    "litellm>=1.0.0"
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "pytest-cov>=4.0.0"
+]
+
+[project.scripts]
+contextmd = "contextmd.cli.main:main"
+
+[project.urls]
+Homepage = "https://github.com/subham/contextmd"
+Documentation = "https://github.com/subham/contextmd#readme"
+Repository = "https://github.com/subham/contextmd"
+Issues = "https://github.com/subham/contextmd/issues"
+
+[tool.hatch.version]
+source = "vcs"
+fallback-version = "0.1.0"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/contextmd/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/contextmd"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

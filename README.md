@@ -27,7 +27,7 @@ client = ContextMD(OpenAI(), memory_dir=".contextmd/")
 
 # Use exactly like normal - memory is automatic
 response = client.chat.completions.create(
-    model="gpt-4",
+    model="gpt-5.2",
     messages=[{"role": "user", "content": "Hello!"}]
 )
 ```
@@ -41,7 +41,7 @@ from contextmd import ContextMD
 client = ContextMD(Anthropic(), memory_dir=".contextmd/")
 
 response = client.messages.create(
-    model="claude-3-opus-20240229",
+    model="claude-opus-4-6",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello!"}]
 )
@@ -57,13 +57,13 @@ client = ContextMD(litellm, memory_dir=".contextmd/")
 
 # Works with any LiteLLM-supported model
 response = client.completion(
-    model="gpt-4",
+    model="gpt-5.2",
     messages=[{"role": "user", "content": "Hello!"}]
 )
 
 # Or use Claude, Gemini, etc.
 response = client.completion(
-    model="claude-3-opus-20240229",
+    model="claude-opus-4-6",
     messages=[{"role": "user", "content": "Hello!"}]
 )
 ```

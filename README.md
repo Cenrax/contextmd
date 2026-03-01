@@ -189,6 +189,19 @@ contextmd stats
 contextmd reset
 ```
 
+## Upcoming Features
+
+- [ ] Memory search & RAG - Semantic search over stored memories
+- [ ] Multi-user/project namespaces - Isolated memory per project or user
+- [ ] Memory decay & importance scoring - Auto-prune stale facts based on usage
+- [ ] Git integration & sync - Auto-commit and sync memory via git
+- [ ] Memory visualization web UI - Browse and edit memory graph visually
+- [ ] Streaming response support - Extract memories from streamed responses
+- [ ] Custom extraction hooks - Register custom fact extraction logic
+- [ ] Memory analytics - Track usage patterns and export insights
+- [ ] Collaborative memory - Share and merge memories between team members
+- [ ] Advanced memory types - Emotional, causal, and temporal memory
+
 ## Architecture
 
 ```mermaid

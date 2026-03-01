@@ -2,6 +2,34 @@
 
 A provider-agnostic middleware that gives OpenAI, Anthropic, and LiteLLM API calls persistent, human-readable memory using local Markdown files.
 
+**ContextMD** is a middleware library that adds **persistent memory** to LLM API calls (OpenAI, Anthropic, LiteLLM).
+
+## Core Problem It Solves
+LLM APIs are stateless — each request starts fresh with no memory of past conversations. ContextMD fixes this by:
+
+1. **Automatically injecting stored memory** into every API request
+2. **Extracting memorable facts** from responses and saving them
+3. **Storing everything in human-readable Markdown files** (not a database)
+
+## Key Features
+
+- **Provider-agnostic** — Works with OpenAI, Anthropic, and 100+ providers via LiteLLM
+- **Three memory types**:
+  - **Semantic** — Permanent facts (user preferences, project context)
+  - **Episodic** — Time-stamped events (decisions made, tasks completed)
+  - **Procedural** — Learned workflows ("always use pnpm")
+- **Human-readable storage** — All memory stored as `.md` files you can read/edit
+- **Session management** — Group related conversations with snapshots
+- **CLI tools** — `contextmd show`, `contextmd add`, `contextmd history`, etc.
+
+## Use Case Example
+An AI coding assistant that remembers:
+- Your tech stack preferences
+- Past decisions you made
+- Your coding style rules
+
+...across multiple conversations, without you repeating yourself.
+
 ## Installation
 
 ```bash
@@ -163,38 +191,46 @@ contextmd reset
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Your Application                         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    ContextMD Wrapper                         │
-│  ┌─────────────┐  ┌──────────────┐  ┌───────────────────┐  │
-│  │   Client    │  │   Memory     │  │    Extraction     │  │
-│  │   Wrapper   │──│   Router     │──│    Engine         │  │
-│  └─────────────┘  └──────────────┘  └───────────────────┘  │
-│         │                │                    │             │
-│         │                ▼                    │             │
-│         │        ┌──────────────┐             │             │
-│         │        │   Storage    │◄────────────┘             │
-│         │        │   Layer      │                           │
-│         │        └──────────────┘                           │
-└─────────│───────────────────────────────────────────────────┘
-          │
-          ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Provider Adapters                               │
-│  ┌─────────┐    ┌───────────┐    ┌──────────┐              │
-│  │ OpenAI  │    │ Anthropic │    │ LiteLLM  │              │
-│  └─────────┘    └───────────┘    └──────────┘              │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                      LLM Provider                            │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    A[Your Application Code] --> B[ContextMD Client Wrapper]
+    B --> C[Memory Router]
+    C --> D{Request or Response?}
+    D -- Outgoing Request --> E[Bootstrap Loader]
+    E --> E1[Read MEMORY.md]
+    E --> E2[Read last 48hrs Daily Logs]
+    E1 --> F[System Prompt Injector]
+    E2 --> F
+    F --> G{Which Provider?}
+    G -- OpenAI --> H[OpenAI Adapter]
+    G -- Anthropic --> I[Anthropic Adapter]
+    H --> H1[Inject into system message array]
+    I --> I1[Inject into system parameter]
+    H1 --> J[OpenAI API]
+    I1 --> K[Anthropic API]
+    J --> L[Response Handler]
+    K --> L
+    D -- Incoming Response --> L
+    L --> M[Token Usage Tracker]
+    M --> N{Trigger Extraction?}
+    N -- Token threshold 80% --> O[Pre-Compaction Flush]
+    N -- Session ending --> P[Session Snapshot]
+    N -- Manual remember --> Q[Direct Write]
+    N -- No trigger --> R[Return Response to App]
+    O --> S[Extraction Engine]
+    P --> S
+    Q --> T[Storage Layer]
+    S --> S1[Signal vs Noise Filter]
+    S1 --> S2[Classify: Semantic or Episodic or Procedural]
+    S2 --> S3[Deduplication Check]
+    S3 --> S4[Contradiction Resolution]
+    S4 --> T
+    T --> T1[MEMORY.md]
+    T --> T2[Daily Log]
+    T --> T3[Session Snapshot File]
+    O --> R
+    P --> R
+    Q --> R
 ```
 
 ## Development

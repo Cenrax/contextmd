@@ -101,9 +101,9 @@ ContextMD intercepts your API calls and:
 
 ```python
 # Remember something explicitly
-client.remember("User prefers dark mode", type="semantic")
-client.remember("Completed auth feature", type="episodic")
-client.remember("Always run tests before commit", type="procedural")
+client.remember("User prefers dark mode", memory_type="semantic")
+client.remember("Completed auth feature", memory_type="episodic")
+client.remember("Always run tests before commit", memory_type="procedural")
 ```
 
 ### Session Management

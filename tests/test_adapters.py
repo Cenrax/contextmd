@@ -126,8 +126,10 @@ class TestLiteLLMAdapter:
     def test_get_context_window_size_fallback(self) -> None:
         adapter = LiteLLMAdapter()
 
-        assert adapter.get_context_window_size("gpt-5") == 400000
-        assert adapter.get_context_window_size("claude-opus-4") == 200000
+        # Test with unknown model to ensure fallback works
+        # Known models may return actual values from litellm.get_model_info
+        result = adapter.get_context_window_size("unknown-model-xyz")
+        assert result == 128000  # Default fallback
 
 
 class TestAdapterRegistry:
